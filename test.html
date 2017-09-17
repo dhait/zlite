@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2017, David J Hait.
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without
+  ~ modification, are permitted provided that the following conditions are met:
+  ~
+  ~ * Redistributions of source code must retain the above copyright notice, this
+  ~   list of conditions and the following disclaimer.
+  ~
+  ~ * Redistributions in binary form must reproduce the above copyright notice,
+  ~   this list of conditions and the following disclaimer in the documentation
+  ~   and/or other materials provided with the distribution.
+  ~
+  ~ * Neither the name of the copyright holder nor the names of its
+  ~   contributors may be used to endorse or promote products derived from
+  ~   this software without specific prior written permission.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  ~ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  ~ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  ~ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  ~ DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  ~ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  ~ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  ~ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  ~ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  ~
+  -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>
+    \documentclass{article}</p>
+<p>
+    \usepackage[mathrm,colour,cntbysection]{czt}</p>
+<p>
+
+    \CountDefstrue</p>
+<p>
+    \begin{document}</p>
+<p>
+    \section{Introduction}</p>
+<p>
+    This is a specification of a simple scheduler and assembler. The
+    system contains a set of registers and a block of memory. Processes
+    can be created, with each containing a sequence on instructions that
+    are executed on the system. The instruction format is a simplified
+    format of the Intel x86 architecture. Processes are scheduled based on
+    the credit system that is found in the Linux 2.0 kernel.</p>
+<p>
+    \section{Stack}</p>
+<p>
+    This specification was written as a test spec for the CZT project. As
+    a result, there are parts that may appear to be specified in a strange
+    way - this is to test out the tools on a large set of Z.</p>
+<p>
+    A generic stack.</p>
+<div class="z-zed">
+</div>
+<p>
+    \ZDeclSummary</p>
+<p>
+    Ok, lets see the value of \thecntZunboxed!</p>
+<p>
+    \section{Definitions}</p>
+<p>
+    Firstly, we define some basic types and functions that are used
+    throughout the specification.</p>
+<p>
+    $singleton$ is the set of all sets whose size is less than or equal to~$1$.
+    This is included only to have a generic axiom definition.</p>
+<div class="z-zed">
+</div>
+<p>
+    The basic type of this system is a word, which specifically, is an
+    unsigned octet. An unsigned word is used so references to memory etc a
+    1-relative.</p>
+<div class="z-zed">
+</div>
+<p>
+    Then, we define the size of the memory block, and give it a value for
+    animation purposes.</p>
+<div class="z-axiom">
+</div>
+<p>
+    A $LABEL$ is used to label instructions for $jump$ instructions etc,
+    although 'jump' hasn't been specified yet.</p>
+<div class="z-zed">
+</div>
+<p>
+    Now we define the different instructions, as well as their operands. A
+    $CONSTANT$ is used both as a constant value, as well as a memory
+    reference for load and store instructions.</p>
+<div class="z-zed">
+</div>
+<p>
+    An instruction is specified as a instruction name, a sequence of
+    operands, and optionally, a label.</p>
+<p>
+    \ZDeclSummary</p>
+<p>
+    \section{System}</p>
+<p>
+    The system consists of a set of registers, and a block of
+    memory. There is also a buffer for displaying output.</p>
+<div class="z-zed">
+</div>
+<p>
+    Initially, all registers and memory hold the minimum $WORD$ value. The
+    output buffer is empty.</p>
+<p>
+    The system can have arithmetic and memory instructions.</p>
+<div class="z-zed">
+</div>
+<div class="z-zed">
+</div>
+<p>
+    A print instruction prints the value of a register.</p>
+<div class="z-zed">
+</div>
+<p>
+    $val$ maps constants to their value, and $dereference$ dereferences
+    the value of a register, transitively if required.</p>
+<div class="z-axiom">
+</div>
+<p>
+    The specification of the arithmetic instructions.</p>
+<p>
+    The {\tt load} operation loads a constant from memory. The second
+    parameter is an index to the memory location from which the constant
+    is loaded.</p>
+<p>
+    {\tt loadConst} loads a constant into a register. The second parameter
+    the constant to be loaded.</p>
+<p>
+    Store the value of a register in memory.</p>
+<div class="z-zed">
+</div>
+<p>
+    The specification of the stack instructions on the system.</p>
+<div class="z-zed">
+</div>
+<p>
+    This executes an instruction on the on the system. $inst?$ is the
+    instruction to execute, and $base?$ is the base memory value of the
+    executing process. If the instruction is a {\tt load} or {\tt store}
+    instruction, the memory reference must offset using the base value.</p>
+<p>
+    \ZDeclSummary</p>
+<p>
+    \section{Scheduler}</p>
+<p>
+    This part of the specification is the scheduler.</p>
+<p>
+    Here, we declare the set of process IDs, the priority values, and the
+    default number of credits a process receives when it is created.</p>
+<div class="z-zed">
+</div>
+<p>
+    The possible status that a process can hold.</p>
+<div class="z-zed">
+</div>
+<p>
+    A process consists of a process ID, a status, a number of credits, and
+    a priority. Each process has a sequence of instructions to be executed
+    on the assembler, with a pointer to the current instruction. The
+    memory that a process can occupy is between a base and limit
+    value. Instructions must only access memory with a value less than the
+    limit, but they know nothing about the base value - this is added onto
+    the memory index provided by the instruction when an instruction is
+    executed. Each procss also contains a stack and values for all
+    registers, which are used to store values when the process is
+    suspended.</p>
+<p>
+    The $sort$ function takes the credits and priorities of all processes,
+    and returns a sequence of process IDS sorted firstly by their credits
+    (the more credits a process has, the higher preference they get), and
+    if the credits are equal, then their priority. If the priority is
+    equal, then the order is non-deterministic.</p>
+<div class="z-axiom">
+</div>
+<p>
+    To interrupt a process during execution, the kernel must be in $kernel$ mode.</p>
+<div class="z-zed">
+</div>
+<p>
+    For the scheduler, we track which mode the operating system is in, as
+    well as declaring three ``secondary'' variables, $waiting$, $running$,
+    and $ready$, to keep the sets of waiting running, and ready variables
+    respecitvely. In fact, $ready$ is a sequence, and is ordered based on
+    the credits that each process has. A process with more credits will
+    have a higher priority. This is fair scheduling, because at each timer
+    interrupt (the $tick$ operation specified below), the current process
+    losses one credit, therefore, process spending a lot of time executing
+    will eventually have a low priority.</p>
+<p>
+    This uses semicolons as conjunctions for predicates, which conforms to
+    the grammar in the ISO standard, but according to the list of
+    differences between ZRM and ISO Z on Ian Toyn's website, semicolons
+    can no longer be used to conjoin predicates.</p>
+<p>
+    $newProcess$ creates a new process with a unique process ID and a
+    specified priority, and places this new process on the ready queue.</p>
+<p>
+    We define a schema that contains only the variables that do not change
+    when a reschedule occurs.</p>
+<div class="z-zed">
+</div>
+<p>
+    A reschedule occurs when all ready processes have no credits. Every
+    process, not just the ready processes, have their credits
+    re-calculated using the formula $credits = credits/2 + priority$. This
+    implies that the ready process with the highest priority will be the
+    next process executed.</p>
+<p>
+    We declare a new schema that contains only the state variables that do
+    not change when a status change occurs.</p>
+<div class="z-zed">
+</div>
+<p>
+    Interrupts the currently executing process if the new process is of a
+    higher priority then the current process and the kernel is in $kernel$
+    mode.</p>
+<p>
+    Remove the currently running process and put it back in the ready queue.</p>
+<p>
+    A process becomes blocked if it is waiting on a resource such a an IO
+    device, or waiting on another process</p>
+<div class="z-zed">
+</div>
+<p>
+    We declare a schema containing only the variables that change for an
+    unblock.</p>
+<div class="z-zed">
+</div>
+<p>
+    Unblocks a process that is blocked by another process.</p>
+<p>
+    Remove a process from the system</p>
+<p>
+    Update the details in the process table when each instruction is
+    executed, as well as communicate the current instruction and the base
+    value for the current process.</p>
+<div class="z-zed">
+</div>
+<div class="z-zed">
+</div>
+<div class="z-zed">
+</div>
+<div class="z-zed">
+</div>
+<div class="z-zed">
+</div>
+<p>
+
+</p>
+<div class="z-zed">
+</div>
+<p>
+    \begin{theorem}{PreconditionCheck}
+    \vdash? \forall Scheduler @ \pre~update\_process\_table
+    \end{theorem}</p>
+<p>
+    \ZDeclSummary</p>
+<p>
+    \end{document}
+</p>
+
+
+
+</body>
+</html>
