@@ -1,0 +1,15 @@
+section set_toolkit end
+
+define \rel      \u2194 end
+define \fun      \u2192 end
+define \neq      \u2260 end
+define \notin    \u2209 end
+define \emptyset \u2205 end
+define \subseteq \u2286 end
+define \subset   \u2282 end
+define \cup      \u222A end
+define \cap      \u2229 end
+define \symdiff  \u2296 end
+define \bigcup   \u22C3 end
+define \bigcap   \u22C2 end
+define \finset   \ud835\udd32 end

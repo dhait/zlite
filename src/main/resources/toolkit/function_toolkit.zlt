@@ -1,0 +1,9 @@
+section function_toolkit parents relation_toolkit end
+
+define \pfun \u21f8 end
+define \pinj \u2914 end
+define \inj \u21a3 end
+define \psurj \u2900 end
+define \surj \u21a0 end
+define \bij \u21f8 end
+define \finj \u2915 end

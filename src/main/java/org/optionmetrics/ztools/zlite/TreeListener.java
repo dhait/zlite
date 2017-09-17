@@ -31,9 +31,18 @@
 
 package org.optionmetrics.ztools.zlite;
 
+import org.antlr.v4.runtime.tree.TerminalNode;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class TreeListener extends ZLiteParserBaseListener {
 
     private String filename;
+    private List<Section> sections = new ArrayList<>();
+    private Section currentSection = new Section();
+    private String sectionName;
+    private List<String> parents = new ArrayList<>();
 
     public TreeListener(String filename) {
         this.filename = filename;
@@ -43,6 +52,45 @@ public class TreeListener extends ZLiteParserBaseListener {
 
         String resource = ctx.D_RESOURCE().getText();
         System.out.println(resource);
+    }
 
+    @Override
+    public void exitS_parents(ZLiteParser.S_parentsContext ctx) {
+        parents = new ArrayList<>();
+        for (TerminalNode node : ctx.S_NAME()) {
+            parents.add(node.getText());
+        }
+    }
+
+    @Override
+    public void exitZsection(ZLiteParser.ZsectionContext ctx) {
+        sectionName = ctx.S_NAME().getText();
+    }
+
+    @Override
+    public void exitZSectionBlockType(ZLiteParser.ZSectionBlockTypeContext ctx) {
+        currentSection = new Section(sectionName, parents);
+        sections.add(currentSection);
+        System.out.println("Section " + ctx.zsection().S_NAME());
+    }
+
+    @Override
+    public void exitSchemaBlock(ZLiteParser.SchemaBlockContext ctx) {
+        System.out.println("Schema");
+    }
+
+    @Override
+    public void exitZBlockType(ZLiteParser.ZBlockTypeContext ctx) {
+        System.out.println("ZBlock");
+    }
+
+    @Override
+    public void exitTextBlockType(ZLiteParser.TextBlockTypeContext ctx) {
+        System.out.println("TextBlock");
+    }
+
+    @Override
+    public void exitDirectiveBlockType(ZLiteParser.DirectiveBlockTypeContext ctx) {
+        super.exitDirectiveBlockType(ctx);
     }
 }

@@ -1,0 +1,9 @@
+section sequence_toolkit parents function_toolkit, number_toolkit end
+
+define \upto \u002e\u002e end
+define \langle \u3008 end
+define \rangle \u3009 end
+define \cat \u2040 end
+define \extract \u21bf end
+define \filter \u21be end
+define \dcat \u2040 end

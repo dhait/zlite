@@ -1,0 +1,37 @@
+section prelude end
+
+define \Delta \u0394 end
+define \Xi \u039e end
+define \theta \u03b8 end
+define \lambda \u03bb end
+define \mu \u03bc end
+
+// Core letter characters
+//
+define \arithmos \ud835\udd38 end
+define \nat \u2115 end
+define \power \u2119 end
+//
+// Brackets
+//
+define \lblot \u2989 end
+define \rbblot \u298a end
+define \ldata \u300a end
+define \rdata \u300b end
+//
+//  Other symbols
+//
+define \vdash \u22a2 end
+define \land \u2227 end
+define \lor \u2228 end
+define \implies \u21d2 end
+define \iff \u21d4 end
+define \lnot \u00ac end
+define \forall \u2200 end
+define \exists \u2203 end
+define \cross \u00d7 end
+define \in \u2208 end
+define \spot \u2981 end
+define \project \u2a21 end
+define \semi \u2a1f end
+define \pipe \u2a20 end

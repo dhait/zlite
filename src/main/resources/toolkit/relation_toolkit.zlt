@@ -1,0 +1,15 @@
+section relation_toolkit parents set_toolkit end
+
+define \mapsto \u21a6 end
+define \comp \u2a3e end
+define \circ \u2218 end
+define \dres \u25c1 end
+define \rres \u25b7 end
+define \ndres \u2a64 end
+define \nrres \u2a65 end
+define \inv \u223c end
+define \limg \u2987 end
+define \rimg \u2988 end
+define \oplus \u2295 end
+define \plus + end
+define \star * end
