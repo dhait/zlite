@@ -47,6 +47,7 @@ ZWORD      : '%%Zword'      -> mode(Directive);
 ZINWORD    : '%%Zinword'    -> mode(Directive);
 ZPREWORD   : '%%Zpreword'   -> mode(Directive);
 ZPOSTWORD  : '%%Zpostword'  -> mode(Directive);
+ZINCLUDE   : '%%Zinclude'   -> mode(Directive);
 
 COMMENT_START : '%' ~'%' -> channel(HIDDEN), mode(Comment);
 
@@ -75,6 +76,10 @@ D_COMMAND  :   '\\' ~[ \t\r\n_^{}\\]+ ;
 D_UNICODE : 'U+' HEX HEX HEX HEX
         | 'U-' HEX HEX HEX HEX HEX HEX HEX HEX
         ;
+
+D_RESOURCE : '"' ~'"'* '"'
+           | '<' ~'>'* '>'
+           ;
 
 D_LBRACE     : '{' ;
 D_RBRACE     : '}' ;

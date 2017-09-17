@@ -92,10 +92,12 @@ s_parents    : S_NAME ( S_COMMA S_NAME)* ;
 zSectionEnd  : END_SECTION ;
 
 // a directive begins with %%.  This puts the lexer into Directive mode.
-directive  : zchar
+directive  : zinclude
+           | zchar
            | zword
            ;
 
+zinclude   : ZINCLUDE D_RESOURCE D_NL;
 
 zchar      : (ZCHAR | ZINCHAR | ZPRECHAR | ZPOSTCHAR) D_COMMAND D_UNICODE D_NL
            ;

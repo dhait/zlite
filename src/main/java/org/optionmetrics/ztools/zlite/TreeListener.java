@@ -31,72 +31,18 @@
 
 package org.optionmetrics.ztools.zlite;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.optionmetrics.ztools.zlite.impl.Directive;
-import org.optionmetrics.ztools.zlite.impl.SectionHeader;
-import org.optionmetrics.ztools.zlite.impl.TextParagraph;
-import org.optionmetrics.ztools.zlite.impl.ZParagraph;
+public class TreeListener extends ZLiteParserBaseListener {
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+    private String filename;
 
-public class TreeListener {
-
-    private List<Paragraph> paragraphs = new ArrayList<>();
-    private List<String> parents = new ArrayList<>();
-    private String name = "";
-    private final String file;
-
-    public TreeListener(String file) {
-        this.file = file;
+    public TreeListener(String filename) {
+        this.filename = filename;
     }
-    public List<Paragraph> getParagraphs() {
-        return paragraphs;
-    }
+    @Override
+    public void exitZinclude(ZLiteParser.ZincludeContext ctx) {
 
-    public void exitTextBlockType(ZLiteParser.TextBlockTypeContext ctx) {
-        // informal
-        paragraphs.add(new TextParagraph(ctx));
-    }
+        String resource = ctx.D_RESOURCE().getText();
+        System.out.println(resource);
 
-    public void exitZBlockType(ZLiteParser.ZBlockTypeContext ctx) {
-        paragraphs.add(new ZParagraph(ctx));
     }
-
-    public void exitDirectiveBlockType(ZLiteParser.DirectiveBlockTypeContext ctx) {
-        // process directives
-        ZLiteParser.DirectiveContext dctx = ctx.directive();
-        if (dctx.zchar() != null) {
-            String name = dctx.zchar().D_COMMAND().getText();
-            String value = dctx.zchar().D_UNICODE().getText();
-            String command = dctx.zchar().ZCHAR().getText();
-            paragraphs.add(new Directive(command, name, value));
-        }
-        else if (dctx.zword() != null) {
-            String name = dctx.zword().D_COMMAND().getText();
-            //String value = dctx.zword().d_expression().getText();
-            String command = dctx.zword().ZWORD().getText();
-            //paragraphs.add(new Directive(command, name, value));
-        }
-    }
-
-    public void exitS_parents(ZLiteParser.S_parentsContext ctx) {
-        parents.clear();
-        for (TerminalNode t : ctx.S_NAME()) {
-            parents.add(t.getText());
-        }
-    }
-
-    public void exitZsection(ZLiteParser.ZsectionContext ctx) {
-        name = ctx.S_NAME().getText();
-    }
-
-    public void exitZSectionBlockType(ZLiteParser.ZSectionBlockTypeContext ctx) {
-        // create new section with correct name
-        paragraphs.add(new SectionHeader(name, parents));
-    }
-
 }

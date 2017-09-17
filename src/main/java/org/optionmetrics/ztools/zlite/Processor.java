@@ -101,10 +101,11 @@ public class Processor {
         if (errorListener.getErrorCount() > 0) {
             System.err.println(errorListener.getErrorCount() + " errors in file " + fileName);
         } else {
-            TreeVisitor visitor = new TreeVisitor();
-            tree.accept(visitor);
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(listener,tree);
         }
-        return listener.getParagraphs();
+        //return listener.getParagraphs();
+        return null;
     }
 
     // for a collection of sections, return the set of parents of
