@@ -36,9 +36,6 @@ import org.optionmetrics.ztools.zlite.ZLiteParser;
 
 public class TextParagraph extends Paragraph {
 
-    public TextParagraph(ZLiteParser.TextBlockTypeContext ctx) {
-        super(ctx);
-    }
 
     @Override
     protected Type type() {

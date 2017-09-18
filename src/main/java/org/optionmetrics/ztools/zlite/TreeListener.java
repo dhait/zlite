@@ -47,6 +47,7 @@ public class TreeListener extends ZLiteParserBaseListener {
     public TreeListener(String filename) {
         this.filename = filename;
     }
+
     @Override
     public void exitZinclude(ZLiteParser.ZincludeContext ctx) {
 
@@ -65,13 +66,19 @@ public class TreeListener extends ZLiteParserBaseListener {
     @Override
     public void exitZsection(ZLiteParser.ZsectionContext ctx) {
         sectionName = ctx.S_NAME().getText();
+        currentSection = new Section(sectionName, parents);
+        sections.add(currentSection);
+        System.out.println("Section " + sectionName);
     }
 
     @Override
-    public void exitZSectionBlockType(ZLiteParser.ZSectionBlockTypeContext ctx) {
-        currentSection = new Section(sectionName, parents);
-        sections.add(currentSection);
-        System.out.println("Section " + ctx.zsection().S_NAME());
+    public void exitText(ZLiteParser.TextContext ctx) {
+        System.out.println("Text");
+    }
+
+    @Override
+    public void exitZblock(ZLiteParser.ZblockContext ctx) {
+        System.out.println("Z");
     }
 
     @Override
@@ -79,18 +86,4 @@ public class TreeListener extends ZLiteParserBaseListener {
         System.out.println("Schema");
     }
 
-    @Override
-    public void exitZBlockType(ZLiteParser.ZBlockTypeContext ctx) {
-        System.out.println("ZBlock");
-    }
-
-    @Override
-    public void exitTextBlockType(ZLiteParser.TextBlockTypeContext ctx) {
-        System.out.println("TextBlock");
-    }
-
-    @Override
-    public void exitDirectiveBlockType(ZLiteParser.DirectiveBlockTypeContext ctx) {
-        super.exitDirectiveBlockType(ctx);
-    }
 }

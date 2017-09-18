@@ -35,10 +35,10 @@ options {tokenVocab = ZLiteLexer; }
 root : block* EOF;
 
 // A block can be regular text, a directive, a section header, or z notation
-block  : text      #TextBlockType
-       | zblock    #ZBlockType
-       | zsection  #ZSectionBlockType
-       | directive #DirectiveBlockType
+block  : text
+       | zblock
+       | zsection
+       | directive
         ;
 
 // In text mode (the default mode), and text is recognized.
@@ -52,19 +52,10 @@ paragraph  : PARAGRAPH ;
 zblock     : zedBlock  | axiomBlock | genBlock | schemaBlock ;
 
 // Z mode rules
-zedBlock   : zedBlockStart z_expression* zedBlockEnd;
-axiomBlock : axiomBlockStart z_expression* axiomBlockEnd;
-genBlock   : genBlockStart z_expression*  genBlockEnd;
-schemaBlock: schemaBlockStart z_expression* schemaBlockEnd;
-
-zedBlockStart : BEGIN_ZED;
-zedBlockEnd   : END_ZED;
-axiomBlockStart : BEGIN_AXIOM;
-axiomBlockEnd   : END_AXIOM;
-genBlockStart   : BEGIN_GEN;
-genBlockEnd     : END_GEN;
-schemaBlockStart : BEGIN_SCHEMA;
-schemaBlockEnd   : END_SCHEMA;
+zedBlock   : BEGIN_ZED z_expression* END_ZED;
+axiomBlock : BEGIN_AXIOM z_expression* END_AXIOM;
+genBlock   : BEGIN_GEN z_expression*  END_GEN;
+schemaBlock: BEGIN_SCHEMA z_expression* END_SCHEMA;
 
 z_expression : z_expression Z_CARET z_expression
              | z_expression Z_UNDERSCORE z_expression
@@ -86,10 +77,8 @@ z_hardspace  : Z_INTERWORD_SPACE
              ;
 
 // A sectionHeader begins with zSectionStart.  This puts the lexer into Section mode.
-zsection   : zSectionStart S_SECTION S_NAME (S_PARENTS s_parents)?  zSectionEnd;
-zSectionStart: BEGIN_SECTION ;
+zsection   : BEGIN_SECTION S_SECTION S_NAME (S_PARENTS s_parents)?  END_SECTION;
 s_parents    : S_NAME ( S_COMMA S_NAME)* ;
-zSectionEnd  : END_SECTION ;
 
 // a directive begins with %%.  This puts the lexer into Directive mode.
 directive  : zinclude
