@@ -63,7 +63,7 @@ public class ZLiteGrammarTests {
 
         ParserRuleContext tree = parser.root();
 
-        TreeListener listener = new TreeListener("birthday");
+        TreeListener listener = new TreeListener("birthday", null);
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(listener, tree);
 

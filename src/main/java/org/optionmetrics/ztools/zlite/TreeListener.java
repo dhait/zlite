@@ -33,26 +33,36 @@ package org.optionmetrics.ztools.zlite;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TreeListener extends ZLiteParserBaseListener {
 
-    private String filename;
+    private final SearchPath searchPath;
+    private final String filename;
     private List<Section> sections = new ArrayList<>();
     private Section currentSection = new Section();
     private String sectionName;
     private List<String> parents = new ArrayList<>();
 
-    public TreeListener(String filename) {
+    public TreeListener(String filename, SearchPath searchPath) {
         this.filename = filename;
+        this.searchPath = searchPath;
     }
 
     @Override
     public void exitZinclude(ZLiteParser.ZincludeContext ctx) {
 
         String resource = ctx.D_RESOURCE().getText();
-        System.out.println(resource);
+        resource = resource.substring(1, resource.length()-1);
+        Processor processor = new Processor(searchPath);
+        try {
+            processor.process2(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Included " + resource);
     }
 
     @Override

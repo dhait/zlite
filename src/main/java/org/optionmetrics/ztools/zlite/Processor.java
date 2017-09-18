@@ -60,6 +60,33 @@ public class Processor {
         return sections;
     }
 
+    public void process2(String name) throws IOException {
+        String fileName = name;
+        fileName = fileName + ".zlt";
+        InputStream inputStream = searchPath.find(fileName);
+        CharStream stream = CharStreams.fromStream(inputStream);
+
+        ZLiteLexer lexer = new ZLiteLexer(stream);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        ZLiteParser parser = new ZLiteParser(tokens);
+        parser.removeErrorListeners();
+        ErrorListener errorListener = new ErrorListener(fileName);
+        parser.addErrorListener(errorListener);
+
+        ParserRuleContext tree = parser.root();
+
+        TreeListener listener = new TreeListener(fileName, searchPath);
+
+        if (errorListener.getErrorCount() > 0) {
+            System.err.println(errorListener.getErrorCount() + " errors in file " + fileName);
+        } else {
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(listener,tree);
+        }
+        //return listener.getParagraphs();
+    }
+
     public String process(String name) throws IOException, CircularDependencyException {
 
         // parser and order the sections
@@ -96,7 +123,7 @@ public class Processor {
 
         ParserRuleContext tree = parser.root();
 
-        TreeListener listener = new TreeListener(fileName);
+        TreeListener listener = new TreeListener(fileName, searchPath);
 
         if (errorListener.getErrorCount() > 0) {
             System.err.println(errorListener.getErrorCount() + " errors in file " + fileName);

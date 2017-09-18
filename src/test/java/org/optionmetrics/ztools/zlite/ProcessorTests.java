@@ -42,9 +42,11 @@ public class ProcessorTests {
     public void basicTest() throws IOException, CircularDependencyException {
         SearchPath searchPath = new SearchPath();
         searchPath.addItem(SearchPath.SourceType.RESOURCE_PATH, "");
+        searchPath.addItem(SearchPath.SourceType.RESOURCE_PATH, "/toolkit");
+
         InputStream stream = searchPath.find("birthday.zlt");
 
         Processor processor = new Processor(searchPath);
-        processor.process("birthday");
+        processor.process2("birthday");
     }
 }

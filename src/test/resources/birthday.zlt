@@ -28,6 +28,9 @@
 
 /* This is an example of the birthday book. */
 
+
+%%Zinclude <standard_toolkit>
+
 \begin{zsection}
 \SECTION birthday
 \end{zsection}
